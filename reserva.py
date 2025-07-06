@@ -11,6 +11,8 @@ import logging
 from logging import handlers
 
 # TODO: usar funções
+
+# Log configuration
 log_level = os.getenv("LOG_LEVEL", "WARNING").upper()
 
 log = logging.Logger("app_reserva", log_level)
@@ -32,10 +34,12 @@ log.addHandler(fh)
 
 log.info("Sistema iniciado.")
 
+# Definition of directory and text files
 PATH = os.curdir
 ROOMS_FILEPATH = os.path.join(PATH, "quartos.txt")
 RESERVATION_FILEPATH = os.path.join(PATH, "reservas.txt")
 
+# Welcome screen
 user = os.getenv("USER","anônimo(a)")
 print("")
 print("#" * 66)
@@ -43,6 +47,7 @@ print(f"{' Olá ' + user.capitalize() +', bem-vindo(a) ao TReservas! ':#^66}")
 print("#" * 66)
 print("")
 
+# Main menu
 leave_while = False
 while True:
     print("O que você deseja fazer?\n")
@@ -66,6 +71,7 @@ while True:
         print("Você escolheu a opção: (1) Fazer uma reserva.\n")
         print("Nós trabalhamos com os seguintes tipos de quartos:")
         
+        # Displays existing rooms
         try:
             with open(ROOMS_FILEPATH) as rooms_file:
                 for line in rooms_file:
@@ -86,6 +92,7 @@ while True:
         print("Buscando quartos disponíveis...\n")
         time.sleep(1)
         
+        # Show available rooms
         try:
             with open(ROOMS_FILEPATH) as rooms_file:
                 all_rooms_code = []
@@ -141,6 +148,7 @@ while True:
             log.error(e)
             sys.exit(1)    
         
+        # Confirm reservation
         while True:
             answer_confirm_reserve = input("Deseja prosseguir com a reserva para algum destes quartos (y/n)? ")
             print("")
@@ -200,6 +208,7 @@ while True:
         continue_while = False
         leave_while = False
         
+        # Receive data form the user
         guest_name = input("Digite o nome do hóspede: ").title().strip()
         guest_full_name = " ".join(guest_name.split())
         guest_full_name_no_space = "".join(guest_name.split())
@@ -232,6 +241,7 @@ while True:
 
         print("")
 
+        # Validation of reservation data
         try:
             code_found = False
             total_value = float
@@ -290,6 +300,8 @@ while True:
     elif option_choosen == 2:
         log.debug(f"usuario escolheu a opcao {option_choosen}.")
         print("Você escolheu a opção: (2) Visualizar os dados da sua reserva.\n")
+
+        # Validation of the data to be consulted
         guest_name = input("Digite o nome cadastrado na reserva: ").title()
         guest_full_name = " ".join(guest_name.split())
         guest_full_name_no_space = "".join(guest_name.split())
@@ -305,6 +317,8 @@ while True:
                 log.error(f"Usuario digitou o nome com caracteres invalidos. "
                           f"nome={guest_name}, caracteres_invalidos={letter_not_allowed}")
                 sys.exit(1)
+
+        # Save guest names to list
         try:
             with open(RESERVATION_FILEPATH) as reservation_file:
                 list_reserve_guest_name = []
@@ -321,6 +335,7 @@ while True:
             log.error(e)
             sys.exit(1)
 
+        # Show reservation data
         try:
             if guest_name in list_reserve_guest_name:
                 with open(RESERVATION_FILEPATH) as reservation_file:
@@ -347,6 +362,8 @@ while True:
     elif option_choosen == 3:
         log.debug(f"usuario escolheu a opcao {option_choosen}.")
         print("Você escolheu a opção: (3) Cancelar uma reserva.\n")
+
+        # Validation of reservation data
         guest_name = input("Digite o nome cadastrado na reserva: ").title()
         guest_full_name = " ".join(guest_name.split())
         guest_full_name_no_space = "".join(guest_name.split())
@@ -363,6 +380,7 @@ while True:
                           f"nome={guest_name}, caracteres_invalidos={letter_not_allowed}")
                 sys.exit(1) 
 
+        # Save guest names to list
         try:
             with open(RESERVATION_FILEPATH) as reservation_file:
                 list_reserve_guest_name = []
@@ -379,6 +397,7 @@ while True:
             log.error(e)
             sys.exit(1)
 
+        # Check reservation details
         try:    
             with open(RESERVATION_FILEPATH) as reservation_file:
                 for line in reservation_file:
@@ -427,6 +446,7 @@ while True:
             log.error(e)
             sys.exit(1)
 
+        # cancel reservation
         try:
             if guest_name in list_reserve_guest_name:
                 with open(RESERVATION_FILEPATH, 'w') as reservation_file:
