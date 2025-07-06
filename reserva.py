@@ -1,4 +1,4 @@
-__version__ = "1.0.1"
+__version__ = "1.0.2"
 __author__ = "Marco Silva"
 __email__ = "marcoa.silva84@gmail.com"
 __license__ = "MIT"
@@ -38,9 +38,9 @@ RESERVATION_FILEPATH = os.path.join(PATH, "reservas.txt")
 
 user = os.getenv("USER","anônimo(a)")
 print("")
-print("#" * 85)
-print(f"{' Olá ' + user.capitalize() +', bem-vindo(a) ao TReservas! ':#^85}")
-print("#" * 85)
+print("#" * 66)
+print(f"{' Olá ' + user.capitalize() +', bem-vindo(a) ao TReservas! ':#^66}")
+print("#" * 66)
 print("")
 
 leave_while = False
@@ -54,7 +54,7 @@ while True:
     try:
         option_choosen = int(input("Digite a opção escolhida: "))
         print("")
-        print("-" * 85)
+        print("-" * 66)
         print("")
     except ValueError as e:
         print(f"[ERROR] {e}")
@@ -81,8 +81,7 @@ while True:
             log.error(e)
             sys.exit(1)
 
-        print("Caso haja algum quarto disponível, vamos exibir o " \
-            "seu código, nome e valor da diária.\n")
+        print("Vamos exibir os quartos disponíveis no momento.")
         time.sleep(1)
         print("Buscando quartos disponíveis...\n")
         time.sleep(1)
@@ -122,14 +121,15 @@ while True:
 
         busy_rooms = set(all_rooms_code) & set(list(reserved_rooms_code))
         
+        print("NÚMERO - NOME DO QUARTO - DIÁRIA")
+
         try:
             any_room_found = False
             with open(ROOMS_FILEPATH) as rooms_file:
                 for line in rooms_file:
-                    file_parts = line.split(",")
-                    room_code = file_parts[0]
+                    room_code, room_name, room_price = line.split(",")
                     if room_code not in busy_rooms:
-                        print(line)
+                        print(f"{room_code:<6} - {room_name:<14} - {room_price}")
                         any_room_found = True                
         except FileNotFoundError as e:
             print(e)
@@ -143,7 +143,7 @@ while True:
         while True:
             answer_confirm_reserve = input("Deseja prosseguir com a reserva para algum destes quartos (y/n)? ")
             print("")
-            print("-" * 85)
+            print("-" * 66)
             print("")
             if answer_confirm_reserve.lower() == 'y':
                 print("Por favor preencha os dados abaixo:\n")
@@ -157,7 +157,7 @@ while True:
             else:
                 print("Opção inválida! Digite `y` ou `n`.")
                 print("")
-                print("-" * 85)
+                print("-" * 66)
                 print("")
                 continue
 
@@ -172,7 +172,7 @@ while True:
             while True:
                 answer_menu_1 = input("Deseja realizar outra operação (y/n)? ")
                 print("")
-                print("-" * 85)
+                print("-" * 66)
                 print("")
                 if answer_menu_1.lower() == 'y':
                     print("Voltando ao menu inicial...\n")
@@ -188,7 +188,7 @@ while True:
                 else:
                     print("Opção inválida! Digite `y` ou `n`.")
                     print("")
-                    print("-" * 85)
+                    print("-" * 66)
                     print("")
                     continue
             
@@ -401,7 +401,7 @@ while True:
                             else:
                                 print("Opção inválida! Por favor escolha `y` ou `n`.")
                                 print("")
-                                print("-" * 85)
+                                print("-" * 66)
                                 print("")
                                 continue
         except FileNotFoundError as e:
@@ -459,7 +459,7 @@ while True:
         print("Opção inválida! Favor escolha entre 1 e 4.")
         log.debug(f"Usuario escolheu uma opção inválida. Opcao `{option_choosen}`")
         print("")
-        print("-" * 85)
+        print("-" * 66)
         print("")
         continue
     
@@ -468,7 +468,7 @@ while True:
     while True:
         answer_menu_2 = input("Deseja realizar outra operação (y/n)? ")
         print("")
-        print("-" * 85)
+        print("-" * 66)
         print("")
         if answer_menu_2.lower() == 'y':
             print("Voltando ao menu inicial...\n")
@@ -482,7 +482,7 @@ while True:
         else:
             print("Opção inválida! Digite `y` ou `n`.")
             print("")
-            print("-" * 85)
+            print("-" * 66)
             print("")
             continue
     if leave_while:
