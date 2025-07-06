@@ -1,4 +1,4 @@
-__version__ = "1.0.2"
+__version__ = "1.0.3"
 __author__ = "Marco Silva"
 __email__ = "marcoa.silva84@gmail.com"
 __license__ = "MIT"
@@ -128,8 +128,9 @@ while True:
             with open(ROOMS_FILEPATH) as rooms_file:
                 for line in rooms_file:
                     room_code, room_name, room_price = line.split(",")
+                    room_price = float(room_price.strip())
                     if room_code not in busy_rooms:
-                        print(f"{room_code:<6} - {room_name:<14} - {room_price}")
+                        print(f"{room_code:<6} - {room_name:<14} - {room_price:.2f}")
                         any_room_found = True                
         except FileNotFoundError as e:
             print(e)
@@ -237,13 +238,14 @@ while True:
             with open(ROOMS_FILEPATH) as rooms_file:
                 for rooms_file_line in rooms_file:
                     room_code, room_name, room_price = rooms_file_line.strip().split(",")
+                    room_price = float(room_price.strip())
                     if str(code) in room_code:
                         with open(RESERVATION_FILEPATH) as reservation_file:
                             for reservation_file_line in reservation_file:
                                 reservation_file_parts = reservation_file_line.strip().split(",")
                                 reservation_code = reservation_file_parts[1].strip()                 
                                 if str(code) in reservation_code.strip():
-                                    print(f"Você selecionou o quarto {room_code},{room_name}, {room_price}")
+                                    print(f"Você selecionou o quarto {room_code},{room_name}, {room_price:.2f}")
                                     print(f"O quarto selecionado já está ocupado.")
                                     print("Saindo do sistema...")
                                     log.warning(f"Tentativa de reservar um quarto ja ocupado: "
@@ -251,19 +253,19 @@ while True:
                                                 f"hospede={guest_name}, "
                                                 f"codigo_quarto={room_code}, "
                                                 f"nome_quarto={room_name}, "
-                                                f"preco_quarto={room_price}")
+                                                f"preco_quarto={room_price:.2f}")
                                     time.sleep(1)
                                     sys.exit(1)
                         with open(RESERVATION_FILEPATH, "a") as reservation_file:
                             reservation_file.write(f"{guest_full_name},{code},{days}\n")
-                            total_value = float(room_price) * int(days)
+                            total_value = room_price * int(days)
                             print("Sua reserva foi concluída com sucesso.")
                             print("Segue um resumo da sua reserva:\n")
                             print(f"Nome: {guest_name}")
                             print(f"Código do quarto: {room_code}")
                             print(f"Nome do quarto: {room_name}")
                             print(f"Quantidade de dias: {days}")
-                            print(f"Valor total: {total_value}")
+                            print(f"Valor total: {total_value:.2f}")
                             code_found = True
             log.info(f"Reserva efetuada: "
                      f"usuário={user}, "
@@ -271,7 +273,7 @@ while True:
                      f"codigo_quarto={room_code}, "
                      f"nome_quarto={room_name}, "
                      f"qtd_dias={days}, "
-                     f"valor_total={total_value}")        
+                     f"valor_total={total_value:.2f}")        
             if not code_found:
                 print("Código do quarto não encontrado!\n")
                 log.warning(f"Usuario digitou um codigo de quarto invalido.")
