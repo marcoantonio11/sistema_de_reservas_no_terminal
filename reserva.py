@@ -1,4 +1,4 @@
-__version__ = "1.0.0"
+__version__ = "1.0.1"
 __author__ = "Marco Silva"
 __email__ = "marcoa.silva84@gmail.com"
 __license__ = "MIT"
@@ -32,9 +32,9 @@ log.addHandler(fh)
 
 log.info("Sistema iniciado.")
 
-path = os.curdir
-rooms_filepath = os.path.join(path, "quartos.txt")
-reservation_filepath = os.path.join(path, "reservas.txt")
+PATH = os.curdir
+ROOMS_FILEPATH = os.path.join(PATH, "quartos.txt")
+RESERVATION_FILEPATH = os.path.join(PATH, "reservas.txt")
 
 user = os.getenv("USER","anônimo(a)")
 print("")
@@ -67,7 +67,7 @@ while True:
         print("Nós trabalhamos com os seguintes tipos de quartos:")
         
         try:
-            with open(rooms_filepath) as rooms_file:
+            with open(ROOMS_FILEPATH) as rooms_file:
                 for line in rooms_file:
                     file_parts = line.strip().split(",")
                     print(file_parts[1])
@@ -88,7 +88,7 @@ while True:
         time.sleep(1)
         
         try:
-            with open(rooms_filepath) as rooms_file:
+            with open(ROOMS_FILEPATH) as rooms_file:
                 all_rooms_code = []
                 for line in rooms_file:
                     file_parts = line.strip().split(",")
@@ -103,7 +103,7 @@ while True:
             sys.exit(1)
 
         try:    
-            with open(reservation_filepath) as reservation_file:
+            with open(RESERVATION_FILEPATH) as reservation_file:
                 reserved_rooms_code = []
                 for line in reservation_file:
                     line = line.strip()
@@ -124,7 +124,7 @@ while True:
         
         try:
             any_room_found = False
-            with open(rooms_filepath) as rooms_file:
+            with open(ROOMS_FILEPATH) as rooms_file:
                 for line in rooms_file:
                     file_parts = line.split(",")
                     room_code = file_parts[0]
@@ -234,11 +234,11 @@ while True:
         try:
             code_found = False
             total_value = float
-            with open(rooms_filepath) as rooms_file:
+            with open(ROOMS_FILEPATH) as rooms_file:
                 for rooms_file_line in rooms_file:
                     room_code, room_name, room_price = rooms_file_line.strip().split(",")
                     if str(code) in room_code:
-                        with open(reservation_filepath) as reservation_file:
+                        with open(RESERVATION_FILEPATH) as reservation_file:
                             for reservation_file_line in reservation_file:
                                 reservation_file_parts = reservation_file_line.strip().split(",")
                                 reservation_code = reservation_file_parts[1].strip()                 
@@ -254,7 +254,7 @@ while True:
                                                 f"preco_quarto={room_price}")
                                     time.sleep(1)
                                     sys.exit(1)
-                        with open(reservation_filepath, "a") as reservation_file:
+                        with open(RESERVATION_FILEPATH, "a") as reservation_file:
                             reservation_file.write(f"{guest_full_name},{code},{days}\n")
                             total_value = float(room_price) * int(days)
                             print("Sua reserva foi concluída com sucesso.")
@@ -304,7 +304,7 @@ while True:
                           f"nome={guest_name}, caracteres_invalidos={letter_not_allowed}")
                 sys.exit(1)
         try:
-            with open(reservation_filepath) as reservation_file:
+            with open(RESERVATION_FILEPATH) as reservation_file:
                 list_reserve_guest_name = []
                 for line in reservation_file:
                     file_parts = line.strip().split(",")
@@ -321,7 +321,7 @@ while True:
 
         try:
             if guest_name in list_reserve_guest_name:
-                with open(reservation_filepath) as reservation_file:
+                with open(RESERVATION_FILEPATH) as reservation_file:
                     for line in reservation_file:
                         file_parts = line.strip().split(",")
                         if guest_name in file_parts[0]:
@@ -362,7 +362,7 @@ while True:
                 sys.exit(1) 
 
         try:
-            with open(reservation_filepath) as reservation_file:
+            with open(RESERVATION_FILEPATH) as reservation_file:
                 list_reserve_guest_name = []
                 for line_reserve in reservation_file:
                     file_parts = line_reserve.strip().split(",")
@@ -378,7 +378,7 @@ while True:
             sys.exit(1)
 
         try:    
-            with open(reservation_filepath) as reservation_file:
+            with open(RESERVATION_FILEPATH) as reservation_file:
                 for line in reservation_file:
                     reserve_guest_name, room_code, days = line.strip().split(",")
                     if line.startswith(guest_name + ","):
@@ -414,7 +414,7 @@ while True:
             sys.exit(1)
 
         try:                      
-            with open(reservation_filepath) as reservation_file:
+            with open(RESERVATION_FILEPATH) as reservation_file:
                 lines = reservation_file.readlines()
         except FileNotFoundError as e:
             print(e)
@@ -427,7 +427,7 @@ while True:
 
         try:
             if guest_name in list_reserve_guest_name:
-                with open(reservation_filepath, 'w') as reservation_file:
+                with open(RESERVATION_FILEPATH, 'w') as reservation_file:
                     for line in lines:  
                         if not line.startswith(guest_name + ","):
                             reservation_file.write(line)
